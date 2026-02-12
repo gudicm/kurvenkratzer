@@ -1,0 +1,180 @@
+{
+    "info": {
+        "_postman_id": "b6a7b6a7-b6a7-b6a7-b6a7-b6a7b6a7b6a7",
+        "name": "Prenudge Demo (Fixed)",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Refresh Token",
+            "event": [
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "exec": [
+                            "// Check if tokens are provided in a data file (e.g. via Collection Runner)",
+                            "if (pm.iterationData.has(\"refresh_token\")) {",
+                            "    pm.collectionVariables.set(\"refresh_token\", pm.iterationData.get(\"refresh_token\"));",
+                            "    console.log(\"Loaded refresh_token from data file\");",
+                            "}",
+                            "if (pm.iterationData.has(\"access_token\")) {",
+                            "    pm.collectionVariables.set(\"access_token\", pm.iterationData.get(\"access_token\"));",
+                            "    console.log(\"Loaded access_token from data file\");",
+                            "}"
+                        ],
+                        "type": "text/javascript"
+                    }
+                },
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "var jsonData = pm.response.json();",
+                            "if (jsonData.access_token) {",
+                            "    pm.collectionVariables.set(\"access_token\", jsonData.access_token);",
+                            "    console.log(\"Access Token updated successfully: \" + jsonData.access_token.substring(0, 10) + \"...\");",
+                            "}",
+                            "if (jsonData.refresh_token) {",
+                            "    pm.collectionVariables.set(\"refresh_token\", jsonData.refresh_token);",
+                            "    console.log(\"Refresh Token updated successfully\");",
+                            "}"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "client_id",
+                            "value": "{{client_id}}",
+                            "type": "text"
+                        },
+                        {
+                            "key": "client_secret",
+                            "value": "{{client_secret}}",
+                            "type": "text"
+                        },
+                        {
+                            "key": "grant_type",
+                            "value": "refresh_token",
+                            "type": "text"
+                        },
+                        {
+                            "key": "refresh_token",
+                            "value": "{{refresh_token}}",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "{{token_endpoint}}",
+                    "host": [
+                        "{{token_endpoint}}"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "2. Send Observation (PUT)",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/fhir+json",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Accept",
+                        "value": "application/fhir+json",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"resourceType\": \"Observation\",\n    \"id\": \"{{measurement_id}}\",\n    \"status\": \"final\",\n    \"code\": {\n        \"coding\": [\n            {\n                \"system\": \"http://loinc.org\",\n                \"code\": \"15074-8\",\n                \"display\": \"Blutzucker\"\n            }\n        ],\n        \"text\": \"Blood glucose\"\n    },\n    \"subject\": {\n        \"reference\": \"Patient/{{subject_id}}\"\n    },\n    \"effectiveDateTime\": \"{{timestamp}}\",\n    \"issued\": \"{{timestamp}}\",\n    \"valueQuantity\": {\n        \"value\": {{measurement_value}},\n        \"unit\": \"mg/dl\",\n        \"system\": \"http://unitsofmeasure.org\",\n        \"code\": \"mg/dl\"\n    }\n}"
+                },
+                "url": {
+                    "raw": "{{fhir_endpoint}}/Observation/{{measurement_id}}",
+                    "host": [
+                        "{{fhir_endpoint}}"
+                    ],
+                    "path": [
+                        "Observation",
+                        "{{measurement_id}}"
+                    ]
+                }
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "fhir_endpoint",
+            "value": "https://fhir.dev.prenudge.at/fhir",
+            "type": "string"
+        },
+        {
+            "key": "token_endpoint",
+            "value": "https://keycloak.test.health.joanneum.at/realms/PreNudge/protocol/openid-connect/token",
+            "type": "string"
+        },
+        {
+            "key": "client_id",
+            "value": "zuckerkonto",
+            "type": "string"
+        },
+        {
+            "key": "client_secret",
+            "value": "pG4QkQ5eRMyx7N6Dd8Bjma1kbjfV14I8",
+            "type": "string"
+        },
+        {
+            "key": "refresh_token",
+            "value": "PASTE_YOUR_REFRESH_TOKEN_HERE",
+            "type": "string"
+        },
+        {
+            "key": "access_token",
+            "value": "PASTE_YOUR_ACCESS_TOKEN_HERE_OR_RUN_REFRESH_REQUEST",
+            "type": "string"
+        },
+        {
+            "key": "subject_id",
+            "value": "3fd7b84f-2e3f-3e56-88ed-7d14c8ec03ea",
+            "type": "string"
+        },
+        {
+            "key": "measurement_id",
+            "value": "example-measurement-id-001",
+            "type": "string"
+        },
+        {
+            "key": "measurement_value",
+            "value": "115",
+            "type": "string"
+        },
+        {
+            "key": "timestamp",
+            "value": "2024-10-18T09:00:00.000Z",
+            "type": "string"
+        }
+    ]
+}
