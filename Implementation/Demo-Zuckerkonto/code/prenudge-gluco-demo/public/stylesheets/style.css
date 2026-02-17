@@ -1,0 +1,85 @@
+:root {
+    --color-prenudge-bright: #9bc6a0;
+    --color-prenudge-dark: #00a256;
+}
+
+body {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: #00B7FF;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 1rem;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.alert img {
+    width: 32px;
+}
+
+img.prenudge-full {
+    width: 200px;
+}
+
+div.pn-state {
+    background-color: rgba(155, 198, 160, 0.5);
+    border-radius: 15px;
+}
+
+div.pn-debug {
+    background-color: rgba(236, 236, 236, 0.5);
+    border-radius: 15px;
+}
+
+.pn-debug h3 {
+    font-size: 1.4rem;
+    color: rgb(191, 191, 191);
+}
+
+.container-home h2 {
+    font-size: 1.7rem;
+}
+
+.account-balance {
+    font-size: 8rem;
+    font-family: monospace;
+}
+
+.account-balance img {
+    width: 8rem;
+    height: 8rem;
+    object-fit: cover;
+}
+
+.measurement-value {
+    font-size: 0.9rem;
+}
+
+.measurement-list img {
+    width: 32px;
+}
+
+img.filter-bw {
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%);
+    opacity: 0.3;
+}

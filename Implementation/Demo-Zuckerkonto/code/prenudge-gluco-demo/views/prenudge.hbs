@@ -1,0 +1,92 @@
+<div class="container py-4">
+
+    {{#if error}}
+        <div class="alert alert-warning" role="alert">
+            {{error}}
+        </div>
+    {{/if}}
+
+    {{#if info}}
+        <div class="alert alert-info" role="alert">
+            {{info}}
+        </div>
+    {{/if}}
+
+
+    <img src="/images/prenudge_full.png" alt="PreNudge" class="prenudge-full"/>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <p class="lead">Wir haben uns dem PreNudge Netzwerk angeschlossen und können deine Blutzuckerwerte
+                vollautomatisch in dein PreNudge-Profil übertragen.</p>
+        </div>
+    </div>
+
+    {{#if hasPrenudge}}
+
+        <div class="row">
+            <div class="col-12 pn-state p-4 mb-2">
+                <p class="lead">Du bist mit PreNudge verbunden, und wir übertragen alle deine <span style="font-weight: bold;">neuen</span> Blutzuckerwerte
+                    automatisch.</p>
+                <p>Subject-ID: {{subject}}</p>
+                <a class="btn btn-warning" href="/auth/deauthorize" role="button">PreNudge trennen</a>
+            </div>
+        </div>
+
+    {{/if}}
+
+    {{#unless hasPrenudge}}
+
+        <div class="row">
+            <div class="col-12 pn-state p-4 mb-2">
+                <h3>Möchtest du deine Daten übertragen?</h3>
+                <p class="lead">Alles was du brauchst ist ein PreNudge-Account. Verbinde ihn jetzt, um deine Daten zu
+                    übertragen.</p>
+                <a class="btn btn-success" href="/auth/authorize" role="button">PreNudge verbinden</a>
+            </div>
+        </div>
+
+    {{/unless}}
+
+    {{#if hasPrenudge}}
+
+        <div class="row">
+            <div class="col-12 pn-debug p-4 mb-2">
+                <h3>Credentials</h3>
+                <div class="pn-credentials json-container">
+                    <pre>{{jsonCredentials}}</pre>
+                </div>
+            </div>
+
+            <div class="col-12 pn-debug p-4 mb-2">
+                <h3>Token</h3>
+                <div class="pn-credentials json-container">
+                    <pre>{{jsonToken}}</pre>
+                </div>
+            </div>
+
+            <div class="col-12 pn-debug p-4 mb-2">
+                <h3>Token-Gültigkeit</h3>
+                <div class="pn-credentials json-container">
+                    <div class="mb-2">
+                        {{#if isTokenValid}}
+                            Der Token ist <strong>gültig</strong>.
+                        {{else}}
+                            Der Token ist <strong>nicht gültig</strong>. Bei einer Blutzucker-Übertragung wird er
+                            automatisch verlängert, du kannst ihn allerdings über den Button unten sofort verlängern.
+                        {{/if}}
+                    </div>
+
+                    <div class="mb-2">
+                        Ablaufdatum: {{tokenExpiry}}
+                    </div>
+
+                    <a class="btn btn-secondary" href="/auth/extend" role="button">Token verlängern</a>
+                </div>
+            </div>
+        </div>
+
+    {{/if}}
+
+</div>
+
