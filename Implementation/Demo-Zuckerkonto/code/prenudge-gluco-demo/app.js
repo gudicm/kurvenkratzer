@@ -1,3 +1,4 @@
+import httpTrace from './middleware/http-trace.js'
 import createError from 'http-errors'
 import express from 'express'
 import path from 'path'
@@ -38,6 +39,9 @@ hbs.registerHelper('dateFormat', dateFormat)
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
+
+// incoming request tracing (no-op unless TRACE_HTTP=true)
+app.use(httpTrace)
 
 const LowdbStore = lowdbStore(session)
 const sessionMiddleware = session(
